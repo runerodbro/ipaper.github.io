@@ -1,0 +1,44 @@
+{% assign sidebar = site.data.sidebar.entries %}
+
+<ul class="index">
+    {% for entry in sidebar %}
+		{% for folder in entry.folders %}
+			<li>
+				<span>{{ folder.title }}</span>
+				<ul>
+					{% for folderitem in folder.folderitems %}
+						{% assign itemurl = folderitem.url | remove: ".html" %}
+
+						{% if folderitem.external_url %}
+							<li><a href="{{folderitem.external_url}}" target="_blank">{{folderitem.title}}</a></li>
+						{% elsif page.url == itemurl %}
+							<li><a href="{{folderitem.url}}">{{folderitem.title}}</a></li>
+						{% elsif folderitem.url %}
+							<li><a href="{{folderitem.url}}">{{folderitem.title}}</a></li>
+						{% endif %}
+						{% for subfolders in folderitem.subfolders %}
+							<li>
+								<a href="#">{{ subfolders.title }}</a>
+								<ul>
+									{% for subfolderitem in subfolders.subfolderitems %}
+										{% assign subitemurl = subfolderitem.url | remove: ".html" %}
+
+										{% if subfolderitem.external_url %}
+											<li><small><a href="{{subfolderitem.external_url}}" target="_blank">{{subfolderitem.title}}</a></small></li>
+										{% elsif page.url == subitemurl %}
+											<li class="active"><small><a href="{{subfolderitem.url}}">{{subfolderitem.title}}</a></small></li>
+										{% else %}
+											<li><small><a href="{{subfolderitem.url}}">{{subfolderitem.title}}</a></small></li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							</li>
+						{% endfor %}
+					{% endfor %}
+				</ul>
+			</li>
+		{% endfor %}
+    {% endfor %}
+</ul>
+
+<script>$('#mysidebar li.active').parents('li').addClass('active')</script>
